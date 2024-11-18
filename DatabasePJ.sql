@@ -192,3 +192,93 @@ CREATE TABLE legs (
     landing_ap_name NVARCHAR(20) NOT NULL,
 	CONSTRAINT pk_legs PRIMARY KEY (flight_num)
 );
+
+DROP TABLE IF EXISTS ticket ;
+CREATE TABLE ticket (
+	ticket_id CHAR(6) NOT NULL,
+	seat_num CHAR(3) NOT NULL,
+	destination CHAR(3) NOT NULL,
+	travel_date DATE NOT NULL,
+	arrive_date DATE NOT NULL,
+	start_point CHAR(3) NOT NULL,
+	change_date DATETIME,
+	reserve_date DATETIME NOT NULL,
+	p_passport_id CHAR(9) NOT NULL,
+	cus_citizen_id CHAR(13) NOT NULL,
+	
+		CONSTRAINT pk_ticket PRIMARY KEY (ticket_id, seat_num),
+		CONSTRAINT fk_ticket_passport FOREIGN KEY (p_passport_id) REFERENCES passenger(p_passport_id),
+		CONSTRAINT fk_ticket_citizen FOREIGN KEY (cus_citizen_id) REFERENCES customer(cus_citizen_id)
+		
+    
+);
+
+DROP TABLE IF EXISTS contain ;
+CREATE TABLE contain (
+	flight_num CHAR(6) NOT NULL
+	ticket_id CHAR(6) NOT NULL
+	seat_num CHAR(3) NOT NULL
+		CONSTRAINT pk FOREIGN KEY (flight_num, ticket_id, seat_num)
+    		CONSTRAINT fk_contain_flight FOREIGN KEY (flight_num) REFERENCES legs(flight_num),
+    		CONSTRAINT fk_contain_ticket FOREIGN KEY (ticket_id) REFERENCES ticket(ticket_id),
+		CONSTRAINT fk_contain_seat FOREIGN KEY (seat_num) REFERENCES ticket(seat_num)
+);
+
+DROP TABLE IF EXISTS purchase ;
+CREATE TABLE purchase (
+	addon_id CHAR(5) NOT NULL
+	ticket_id CHAR(6) NOT NULL
+	seat_num CHAR(3) NOT NULL
+		CONSTRAINT pk FOREIGN KEY (addon_id, ticket_id, seat_num)
+    		CONSTRAINT fk_contain_addon FOREIGN KEY (addon_id) REFERENCES add_on(addon_id),
+    		CONSTRAINT fk_contain_ticket FOREIGN KEY (ticket_id) REFERENCES ticket(ticket_id),
+		CONSTRAINT fk_contain_seat FOREIGN KEY (seat_num) REFERENCES ticket(seat_num)
+);
+
+
+DROP TABLE IF EXISTS luggage ;
+CREATE TABLE luggage (
+	luggage_id CHAR(8) NOT NULL,
+	l_pname NVARCHAR(20) NOT NULL,
+	l_weight DECIMAL(3,2) NOT NULL,
+	l_size NVARCHAR(3) NOT NULL,
+	p_passport_id CHAR(9) NOT NULL,
+		CONSTRAINT pk FOREIGN KEY (luggage_id)
+    		CONSTRAINT fk_luggage FOREIGN KEY (p_passport_id) REFERENCES passenger(p_passport_id),
+);
+
+DROP TABLE IF EXISTS color ;
+CREATE TABLE color (
+	luggage_id CHAR(8) NOT NULL,
+	luggage_color NVARCHAR(20) NOT NULL,
+		CONSTRAINT pk_color FOREIGN KEY (luggage_id, luggage_color),
+    		CONSTRAINT fk_color FOREIGN KEY (luggage_id) REFERENCES luggage(luggage_id)
+);
+
+DROP TABLE IF EXISTS class ;
+CREATE TABLE class (
+	flight_num NVARCHAR(20) NOT NULL, #2จุดไม่เหมือนกัน
+	legs_class NVARCHAR(20) NOT NULL,
+		CONSTRAINT pk_color FOREIGN KEY (flight_num, legs_class),
+    		CONSTRAINT fk_class FOREIGN KEY (flight_num) REFERENCES legs(flight_num)
+);
+
+DROP TABLE IF EXISTS boarding ;
+CREATE TABLE boarding (
+	airport_name NVARCHAR(20) NOT NULL,
+	flight_num CHAR(6) NOT NULL,
+		CONSTRAINT pk_boarding FOREIGN KEY (airport_name, flight_num),
+    		CONSTRAINT fk_boarding_airport FOREIGN KEY (airport_name) REFERENCES airport(airport_name)
+		CONSTRAINT fk_boarding_flight FOREIGN KEY (flight_num) REFERENCES legs(flight_num)
+);
+
+DROP TABLE IF EXISTS landing ;
+CREATE TABLE landing (
+	airport_name NVARCHAR(20) NOT NULL,
+	flight_num CHAR(6) NOT NULL,
+		CONSTRAINT pk_boarding FOREIGN KEY (airport_name, flight_num),
+    		CONSTRAINT fk_boarding_airport FOREIGN KEY (airport_name) REFERENCES airport(airport_name)
+		CONSTRAINT fk_boarding_flight FOREIGN KEY (flight_num) REFERENCES legs(flight_num)
+);
+
+
