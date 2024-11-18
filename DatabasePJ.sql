@@ -194,3 +194,5 @@ CREATE TABLE legs (
     CONSTRAINT fk_legs_boarding_airport FOREIGN KEY (boarding_ap_name) REFERENCES airport(airport_name),
     CONSTRAINT fk_legs_landing_airport FOREIGN KEY (landing_ap_name) REFERENCES airport(airport_name)
 );
+
+eiei
