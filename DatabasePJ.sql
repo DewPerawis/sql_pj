@@ -2,8 +2,7 @@ DROP DATABASE IF EXISTS tinyairline;
 CREATE DATABASE IF NOT EXISTS `tinyairline` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 USE `tinyairline`;
 
-DROP TABLE IF EXISTS customer;
-CREATE TABLE customer  (
+CREATE TABLE IF NOT EXISTS customer (
 	cus_citizen_id CHAR(13) NOT NULL,
     cus_fname NVARCHAR(80) NOT NULL,
     cus_lname NVARCHAR(80) NOT NULL,
@@ -11,6 +10,7 @@ CREATE TABLE customer  (
     CONSTRAINT pk_customer PRIMARY KEY (cus_citizen_id)
 );
 
+TRUNCATE TABLE customer;
 INSERT INTO customer VALUES
 ('1102298671394', 'Somchai', 'Yimyai', '1972-10-06'),
 ('1113285777432', 'John', 'Doe', '2010-05-12'),
@@ -63,8 +63,7 @@ INSERT INTO customer VALUES
 ('1162499899066', 'Noah', 'Williams', '1979-11-08'),
 ('1191160386967', 'Noah', 'Martin', '2010-06-01');
 
-DROP TABLE IF EXISTS passenger;
-CREATE TABLE passenger (
+CREATE TABLE IF NOT EXISTS passenger (
 	p_passport_id CHAR(9) NOT NULL,
 	p_fname NVARCHAR(80) NOT NULL,
 	p_lname NVARCHAR(80) NOT NULL,
@@ -73,6 +72,7 @@ CREATE TABLE passenger (
     CONSTRAINT pk_passenger PRIMARY KEY (p_passport_id)
 );
 
+TRUNCATE TABLE passenger;
 INSERT INTO passenger VALUES
 ('BA481920', 'Alice', 'Wonderland', 'Inthe', '1146524329195'),
 ('TQ597511', 'John', 'Doe', NULL, '1131755200177'),
@@ -155,24 +155,20 @@ INSERT INTO passenger VALUES
 ('JN643754', 'Jirawan', 'Kaewmanee', NULL, '1166289602281'),
 ('CR407544', 'Phayung', 'Thongkum', NULL, '1167605526668');
 
-DROP TABLE IF EXISTS add_on ;
-CREATE TABLE add_on (
+CREATE TABLE IF NOT EXISTS add_on (
 	addon_id CHAR(5) NOT NULL,
 	addon_name NVARCHAR(20) NOT NULL,
 	ao_privillege NVARCHAR(20) NOT NULL,
-	ao_nMax NVARCHAR(20) NOT NULL,
+	ao_nMax BOOLEAN NOT NULL,
 	ao_num_used NVARCHAR(20),
 	ao_privillege_id NVARCHAR(20) NOT NULL,
-	ao_nRef NVARCHAR(20) NOT NULL,
+	ao_nRef BOOLEAN NOT NULL,
 	ao_refund_ticket INT,
 	ao_refund_rate DECIMAL(3,2),
     CONSTRAINT pk_add_on PRIMARY KEY (addon_id)
 );
 
-
-
-DROP TABLE IF EXISTS airport ;
-CREATE TABLE airport (
+CREATE TABLE IF NOT EXISTS airport (
 	airport_name NVARCHAR(20) NOT NULL,
 	ap_gateway INT NOT NULL,
 	ap_parking_area INT NOT NULL,
@@ -184,19 +180,15 @@ CREATE TABLE airport (
     CONSTRAINT pk_airport PRIMARY KEY (airport_name)
 );
 
-DROP TABLE IF EXISTS legs ;
-CREATE TABLE legs (
+CREATE TABLE IF NOT EXISTS legs (
     flight_num CHAR(6) NOT NULL,
-    plane_size NVARCHAR(20) NOT NULL,
+    plane_size INT NOT NULL,
     plane_type NVARCHAR(20) NOT NULL,
-    seat_num CHAR(6) NOT NULL,
-    boarding_ap_name NVARCHAR(20) NOT NULL,
-    landing_ap_name NVARCHAR(20) NOT NULL,
+    seat_num CHAR(3) NOT NULL,
 	CONSTRAINT pk_legs PRIMARY KEY (flight_num)
 );
 
-DROP TABLE IF EXISTS ticket ;
-CREATE TABLE ticket (
+CREATE TABLE IF NOT EXISTS ticket (
 	ticket_id CHAR(6) NOT NULL,
 	seat_num CHAR(3) NOT NULL,
 	destination CHAR(3) NOT NULL,
@@ -212,31 +204,25 @@ CREATE TABLE ticket (
 	CONSTRAINT fk_ticket_citizen FOREIGN KEY (cus_citizen_id) REFERENCES customer(cus_citizen_id)
 );
 
-DROP TABLE IF EXISTS contain ;
-CREATE TABLE contain (
+CREATE TABLE IF NOT EXISTS contain (
     flight_num CHAR(6) NOT NULL,
     ticket_id CHAR(6) NOT NULL,
     seat_num CHAR(3) NOT NULL,
     CONSTRAINT pk_contain PRIMARY KEY (flight_num, ticket_id, seat_num),
     CONSTRAINT fk_contain_flight FOREIGN KEY (flight_num) REFERENCES legs(flight_num),
     CONSTRAINT fk_contain_ticket FOREIGN KEY (ticket_id, seat_num) REFERENCES ticket(ticket_id, seat_num)
-    -- CONSTRAINT fk_contain_seat FOREIGN KEY (seat_num) REFERENCES ticket(seat_num)
 );
 
-DROP TABLE IF EXISTS purchase ;
-CREATE TABLE purchase (
+CREATE TABLE IF NOT EXISTS purchase (
 	addon_id CHAR(5) NOT NULL,
 	ticket_id CHAR(6) NOT NULL,
 	seat_num CHAR(3) NOT NULL,
 	CONSTRAINT pk PRIMARY KEY (addon_id, ticket_id, seat_num),
 	CONSTRAINT fk_purchase_addon FOREIGN KEY (addon_id) REFERENCES add_on(addon_id),
 	CONSTRAINT fk_purchase_ticket FOREIGN KEY (ticket_id, seat_num) REFERENCES ticket(ticket_id, seat_num)
-	-- CONSTRAINT fk_contain_seat FOREIGN KEY (seat_num) REFERENCES ticket(seat_num)
 );
 
-
-DROP TABLE IF EXISTS luggage ;
-CREATE TABLE luggage (
+CREATE TABLE IF NOT EXISTS luggage (
 	luggage_id CHAR(8) NOT NULL,
 	l_pname NVARCHAR(20) NOT NULL,
 	l_weight DECIMAL(3,2) NOT NULL,
@@ -246,25 +232,21 @@ CREATE TABLE luggage (
 	CONSTRAINT fk_luggage FOREIGN KEY (p_passport_id) REFERENCES passenger(p_passport_id)
 );
 
-DROP TABLE IF EXISTS color ;
-CREATE TABLE color (
+CREATE TABLE IF NOT EXISTS color (
 	luggage_id CHAR(8) NOT NULL,
 	luggage_color NVARCHAR(20) NOT NULL,
 	CONSTRAINT pk_color PRIMARY KEY (luggage_id, luggage_color),
 	CONSTRAINT fk_color FOREIGN KEY (luggage_id) REFERENCES luggage(luggage_id)
 );
 
-DROP TABLE IF EXISTS class ;
-CREATE TABLE class (
-	flight_num CHAR(6) NOT NULL, -- 2จุดไม่เหมือนกัน
+CREATE TABLE IF NOT EXISTS class (
+	flight_num CHAR(6) NOT NULL, 
 	legs_class NVARCHAR(20) NOT NULL,
 	CONSTRAINT pk_class PRIMARY KEY (flight_num, legs_class),
 	CONSTRAINT fk_class FOREIGN KEY (flight_num) REFERENCES legs(flight_num)
 );
 
-
-DROP TABLE IF EXISTS boarding ;
-CREATE TABLE boarding (
+CREATE TABLE IF NOT EXISTS boarding (
 	airport_name NVARCHAR(20) NOT NULL,
 	flight_num CHAR(6) NOT NULL,
 	CONSTRAINT pk_boarding PRIMARY KEY (airport_name, flight_num),
@@ -272,13 +254,11 @@ CREATE TABLE boarding (
 	CONSTRAINT fk_boarding_flight FOREIGN KEY (flight_num) REFERENCES legs(flight_num)
 );
 
-DROP TABLE IF EXISTS landing ;
-CREATE TABLE landing (
+CREATE TABLE IF NOT EXISTS landing (
 	airport_name NVARCHAR(20) NOT NULL,
 	flight_num CHAR(6) NOT NULL,
 	CONSTRAINT pk_landing PRIMARY KEY (airport_name, flight_num),
 	CONSTRAINT fk_landing_airport FOREIGN KEY (airport_name) REFERENCES airport(airport_name),
 	CONSTRAINT fk_landing_flight FOREIGN KEY (flight_num) REFERENCES legs(flight_num)
 );
-
 
