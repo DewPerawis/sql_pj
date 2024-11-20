@@ -179,6 +179,21 @@ CREATE TABLE IF NOT EXISTS airport (
 	ap_district NVARCHAR(20),
     CONSTRAINT pk_airport PRIMARY KEY (airport_name)
 );
+TRUNCATE TABLE airport;
+INSERT INTO airport (airport_name, ap_gateway, ap_parking_area, ap_runway, ap_terminal, ap_city, ap_country, ap_district) VALUES
+('JFK Airport', 4, 50, 6, 5, 'New York', 'USA', 'Queens'),
+('Heathrow', 3, 45, 4, 4, 'London', 'UK', 'Hillingdon'),
+('Changi Airport', 5, 60, 7, 4, 'Singapore', 'Singapore', NULL),
+('Dubai Airport', 4, 55, 5, 3, 'Dubai', 'UAE', NULL),
+('Haneda Airport', 6, 70, 6, 5, 'Tokyo', 'Japan', 'Ōta'),
+('Frankfurt Airport', 3, 40, 4, 3, 'Frankfurt', 'Germany', 'Hessen'),
+('Sydney Airport', 4, 50, 5, 4, 'Sydney', 'Australia', 'Mascot'),
+('Los Angeles Airport', 5, 80, 7, 6, 'Los Angeles', 'USA', 'Westchester'),
+('Charles de Gaulle', 4, 65, 6, 5, 'Paris', 'France', 'Roissy-en-France'),
+('Hong Kong Airport', 4, 70, 8, 6, 'Hong Kong', 'China', 'Chek Lap Kok');
+
+
+
 
 CREATE TABLE IF NOT EXISTS legs (
     flight_num CHAR(6) NOT NULL,
@@ -187,6 +202,41 @@ CREATE TABLE IF NOT EXISTS legs (
     seat_num CHAR(3) NOT NULL,
 	CONSTRAINT pk_legs PRIMARY KEY (flight_num)
 );
+TRUNCATE TABLE legs;
+INSERT INTO legs (flight_num, plane_size, plane_type, seat_num) VALUES
+('AA101', 180, 'Boeing 737', 'A32'),
+('BA202', 250, 'Airbus A330', 'B12'),
+('DL303', 150, 'Boeing 757', 'C16'),
+('UA404', 200, 'Boeing 767', 'A45'),
+('QF505', 300, 'Airbus A350', 'B22'),
+('EK606', 400, 'Boeing 777', 'C10'),
+('SQ707', 280, 'Airbus A380', 'A60'),
+('AF808', 220, 'Boeing 787', 'B18'),
+('LH909', 160, 'Bombardier CRJ900', 'C21'),
+('CX010', 350, 'Airbus A340', 'A50'),
+('NZ011', 180, 'Boeing 737', 'B25'),
+('VA212', 250, 'Airbus A320', 'C30'),
+('IB313', 150, 'Boeing 737', 'A15'),
+('QR414', 200, 'Airbus A310', 'B19'),
+('AC515', 300, 'Boeing 777', 'C35'),
+('TK616', 400, 'Airbus A350', 'A42'),
+('NH717', 280, 'Airbus A330', 'B29'),
+('JL818', 220, 'Boeing 767', 'C40'),
+('KE919', 160, 'Boeing 757', 'A20'),
+('MU020', 350, 'Airbus A380', 'B31'),
+('CX121', 180, 'Boeing 787', 'C12'),
+('SQ222', 250, 'Airbus A340', 'A48'),
+('BA323', 150, 'Boeing 737', 'B16'),
+('AA424', 200, 'Airbus A310', 'C22'),
+('DL525', 300, 'Boeing 777', 'A38'),
+('UA626', 400, 'Airbus A350', 'B28'),
+('QF727', 280, 'Boeing 767', 'C18'),
+('EK828', 220, 'Airbus A330', 'A26'),
+('AF929', 160, 'Boeing 737', 'B21'),
+('LH030', 350, 'Airbus A380', 'C50');
+
+
+
 
 CREATE TABLE IF NOT EXISTS ticket (
 	ticket_id CHAR(6) NOT NULL,
@@ -203,6 +253,41 @@ CREATE TABLE IF NOT EXISTS ticket (
 	CONSTRAINT fk_ticket_passport FOREIGN KEY (p_passport_id) REFERENCES passenger(p_passport_id),
 	CONSTRAINT fk_ticket_citizen FOREIGN KEY (cus_citizen_id) REFERENCES customer(cus_citizen_id)
 );
+TRUNCATE TABLE ticket;
+INSERT INTO ticket (ticket_id, seat_num, destination, travel_date, arrive_date, start_point, change_date, reserve_date, p_passport_id, cus_citizen_id) VALUES 
+    ('T10001', 'A01', 'NYC', '2024-12-01', '2024-12-02', 'LAX', NULL, '2024-11-15', 'BA481920', '1102298671394'),
+    ('T10002', 'A02', 'LAX', '2024-11-25', '2024-11-26', 'NYC', NULL, '2024-11-10', 'TQ597511', '1113285777432'),
+    ('T10003', 'A03', 'CHI', '2024-12-05', '2024-12-06', 'LAX', NULL, '2024-11-20', 'SX614430', '1119118542694'),
+    ('T10004', 'B01', 'SEA', '2024-11-20', '2024-11-21', 'NYC', NULL, '2024-11-05', 'VE657754', '1180206944788'),
+    ('T10005', 'B02', 'NYC', '2024-12-10', '2024-12-11', 'SEA', NULL, '2024-11-25', 'ED183646', '1148705657013'),
+    ('T10006', 'B03', 'MIA', '2024-11-15', '2024-11-16', 'NYC', NULL, '2024-10-30', 'DO477417', '1140420234729'),
+    ('T10007', 'C01', 'LAX', '2024-12-15', '2024-12-16', 'SEA', NULL, '2024-11-25', 'FR628679', '1126080846486'),
+    ('T10008', 'C02', 'NYC', '2024-11-22', '2024-11-23', 'MIA', NULL, '2024-11-07', 'PY172671', '1167704895602'),
+    ('T10009', 'C03', 'SEA', '2024-11-30', '2024-12-01', 'CHI', NULL, '2024-11-15', 'IW347070', '1193259796875'),
+    ('T10010', 'D01', 'CHI', '2024-12-03', '2024-12-04', 'LAX', NULL, '2024-11-18', 'IH386717', '1109022359732'),
+    ('T10011', 'D02', 'MIA', '2024-12-07', '2024-12-08', 'SEA', NULL, '2024-11-22', 'RX793483', '1153734464339'),
+    ('T10012', 'D03', 'NYC', '2024-12-18', '2024-12-19', 'CHI', NULL, '2024-12-02', 'ON763226', '1102332350591'),
+    ('T10013', 'E01', 'LAX', '2024-11-28', '2024-11-29', 'NYC', NULL, '2024-11-13', 'OA307706', '1117875440464'),
+    ('T10014', 'E02', 'SEA', '2024-11-23', '2024-11-24', 'MIA', NULL, '2024-11-08', 'HO797910', '1141586855058'),
+    ('T10015', 'E03', 'CHI', '2024-12-12', '2024-12-13', 'SEA', NULL, '2024-11-27', 'AE057306', '1184736995081'),
+    ('T10016', 'F01', 'NYC', '2024-11-19', '2024-11-20', 'MIA', NULL, '2024-11-04', 'IB267461', '1106684194824'),
+    ('T10017', 'F02', 'LAX', '2024-11-27', '2024-11-28', 'SEA', NULL, '2024-11-12', 'TZ932350', '1114018019731'),
+    ('T10018', 'F03', 'SEA', '2024-12-08', '2024-12-09', 'NYC', NULL, '2024-11-23', 'JG646776', '1132838002101'),
+    ('T10019', 'G01', 'CHI', '2024-12-14', '2024-12-15', 'LAX', NULL, '2024-11-29', 'AQ655225', '1148442317454'),
+    ('T10020', 'G02', 'NYC', '2024-11-26', '2024-11-27', 'MIA', NULL, '2024-11-11', 'BK313456', '1167781239293'),
+    ('T10021', 'G03', 'LAX', '2024-12-01', '2024-12-02', 'CHI', NULL, '2024-11-16', 'SZ628540', '1192256804086'),
+    ('T10022', 'H01', 'SEA', '2024-12-09', '2024-12-10', 'NYC', NULL, '2024-11-24', 'BX572602', '1132736187935'),
+    ('T10023', 'H02', 'MIA', '2024-11-30', '2024-12-01', 'LAX', NULL, '2024-11-15', 'FX740854', '1117819475207'),
+    ('T10024', 'H03', 'NYC', '2024-12-02', '2024-12-03', 'SEA', NULL, '2024-11-17', 'QG424723', '1157159900852'),
+    ('T10025', 'I01', 'LAX', '2024-12-06', '2024-12-07', 'MIA', NULL, '2024-11-21', 'LX150813', '1149686748854'),
+    ('T10026', 'I02', 'SEA', '2024-11-24', '2024-11-25', 'NYC', NULL, '2024-11-09', 'TH480913', '1114054721122'),
+    ('T10027', 'I03', 'CHI', '2024-11-29', '2024-11-30', 'SEA', NULL, '2024-11-14', 'BV676713', '1102830980988'),
+    ('T10028', 'J01', 'NYC', '2024-12-10', '2024-12-11', 'LAX', NULL, '2024-11-25', 'YY870886', '1136740020318'),
+    ('T10029', 'J02', 'LAX', '2024-11-20', '2024-11-21', 'CHI', NULL, '2024-11-05', 'VV114171', '1190818062557'),
+    ('T10030', 'J03', 'SEA', '2024-11-15', '2024-11-16', 'NYC', NULL, '2024-10-30', 'EK853886', '1123168888823');
+
+
+
 
 CREATE TABLE IF NOT EXISTS contain (
     flight_num CHAR(6) NOT NULL,
@@ -212,6 +297,41 @@ CREATE TABLE IF NOT EXISTS contain (
     CONSTRAINT fk_contain_flight FOREIGN KEY (flight_num) REFERENCES legs(flight_num),
     CONSTRAINT fk_contain_ticket FOREIGN KEY (ticket_id, seat_num) REFERENCES ticket(ticket_id, seat_num)
 );
+TRUNCATE TABLE contain;
+INSERT INTO contain (flight_num, ticket_id, seat_num) VALUES
+('AA101', 'TKT001', 'A32'),
+('BA202', 'TKT002', 'B12'),
+('DL303', 'TKT003', 'C16'),
+('UA404', 'TKT004', 'A45'),
+('QF505', 'TKT005', 'B22'),
+('EK606', 'TKT006', 'C10'),
+('SQ707', 'TKT007', 'A60'),
+('AF808', 'TKT008', 'B18'),
+('LH909', 'TKT009', 'C21'),
+('CX010', 'TKT010', 'A50'),
+('NZ011', 'TKT011', 'B25'),
+('VA212', 'TKT012', 'C30'),
+('IB313', 'TKT013', 'A15'),
+('QR414', 'TKT014', 'B19'),
+('AC515', 'TKT015', 'C35'),
+('TK616', 'TKT016', 'A42'),
+('NH717', 'TKT017', 'B29'),
+('JL818', 'TKT018', 'C40'),
+('KE919', 'TKT019', 'A20'),
+('MU020', 'TKT020', 'B31'),
+('CX121', 'TKT021', 'C12'),
+('SQ222', 'TKT022', 'A48'),
+('BA323', 'TKT023', 'B16'),
+('AA424', 'TKT024', 'C22'),
+('DL525', 'TKT025', 'A38'),
+('UA626', 'TKT026', 'B28'),
+('QF727', 'TKT027', 'C18'),
+('EK828', 'TKT028', 'A26'),
+('AF929', 'TKT029', 'B21'),
+('LH030', 'TKT030', 'C50');
+
+
+
 
 CREATE TABLE IF NOT EXISTS purchase (
 	addon_id CHAR(5) NOT NULL,
