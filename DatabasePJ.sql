@@ -161,12 +161,24 @@ CREATE TABLE IF NOT EXISTS add_on (
 	ao_privillege NVARCHAR(20) NOT NULL,
 	ao_nMax BOOLEAN NOT NULL,
 	ao_num_used NVARCHAR(20),
-	ao_privillege_id NVARCHAR(20) NOT NULL,
+	ao_privillege_id NVARCHAR(20),
 	ao_nRef BOOLEAN NOT NULL,
 	ao_refund_ticket INT,
 	ao_refund_rate DECIMAL(3,2),
     CONSTRAINT pk_add_on PRIMARY KEY (addon_id)
 );
+TRUNCATE TABLE add_on;
+INSERT INTO add_on (addon_id, addon_name, ao_privillege, ao_nMax, ao_num_used, ao_privillege_id, ao_refund_ticket, ao_refund_rate) VALUES
+( 'NAO01', 'Nok Max', 'A premium travel package offering maximum flexibility, extra benefits, and higher baggage allowance.', TRUE, 10, PRV01, FALSE, NULL, NULL ),			
+( 'NAO02', 'Nok Refund', 'A ticket option that allows refunds in case of cancellation, subject to terms and conditions.', FALSE, NULL, NULL, TRUE, 30, 0.80 ),			
+( 'NAO03', 'Nok X-tra', 'An upgraded service providing additional amenities.', FALSE, NULL, NULL, FALSE, NULL, NULL ),			
+( 'NAO04', 'Nok Baggage', 'A service or fee associated with carrying standard checked luggage.', FALSE, NULL, NULL, FALSE, NULL, NULL ),			
+( 'NAO05', 'Nok Special Baggage', 'Allows you to carry an additional 5 kilograms of baggage beyond the standard allowance.', FALSE, NULL, NULL, FALSE, NULL, NULL ),			
+( 'NAO06', 'Nok Sure', 'An insurance or add-on service ensuring compensation for travel interruptions, delays, or cancellations', FALSE, NULL, NULL, FALSE, NULL, NULL ),			
+( 'NAO07', 'Nok First', 'A priority boarding service.', FALSE, NULL, NULL, FALSE, NULL, NULL ),			
+( 'NAO08', 'Nok Meal', 'A pre-ordered in-flight meal service providing a variety of food and drink options.', FALSE, NULL, NULL, FALSE, NULL, NULL ),			
+( 'NAO09', 'Nok Air Lounge', 'Access to premium lounges for comfortable waiting with amenities like snacks, drinks, and Wi-Fi.', FALSE, NULL, NULL, FALSE, NULL, NULL ),			
+( 'NAO10', 'Nok Fast Queue', 'A priority service for faster check-in.', FALSE, NULL, NULL, FALSE, NULL, NULL ),										
 
 CREATE TABLE IF NOT EXISTS airport (
 	airport_name NVARCHAR(20) NOT NULL,
