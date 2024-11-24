@@ -1,3 +1,4 @@
+
 DROP DATABASE IF EXISTS tinyairline;
 CREATE DATABASE IF NOT EXISTS `tinyairline` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 USE `tinyairline`;
@@ -167,6 +168,7 @@ CREATE TABLE IF NOT EXISTS add_on (
 	ao_refund_rate DECIMAL(3,2),
     CONSTRAINT pk_add_on PRIMARY KEY (addon_id)
 );
+
 TRUNCATE TABLE add_on;
 INSERT INTO add_on (addon_id, addon_name, ao_privillege, ao_nMax, ao_num_used, ao_privillege_id, ao_refund_ticket, ao_refund_rate) VALUES
 ( 'NAO01', 'Nok Max', 'A premium travel package offering maximum flexibility, extra benefits, and higher baggage allowance.', TRUE, 10, PRV01, FALSE, NULL, NULL ),			
@@ -178,8 +180,8 @@ INSERT INTO add_on (addon_id, addon_name, ao_privillege, ao_nMax, ao_num_used, a
 ( 'NAO07', 'Nok First', 'A priority boarding service.', FALSE, NULL, NULL, FALSE, NULL, NULL ),			
 ( 'NAO08', 'Nok Meal', 'A pre-ordered in-flight meal service providing a variety of food and drink options.', FALSE, NULL, NULL, FALSE, NULL, NULL ),			
 ( 'NAO09', 'Nok Air Lounge', 'Access to premium lounges for comfortable waiting with amenities like snacks, drinks, and Wi-Fi.', FALSE, NULL, NULL, FALSE, NULL, NULL ),			
-( 'NAO10', 'Nok Fast Queue', 'A priority service for faster check-in.', FALSE, NULL, NULL, FALSE, NULL, NULL ),										
-
+( 'NAO10', 'Nok Fast Queue', 'A priority service for faster check-in.', FALSE, NULL, NULL, FALSE, NULL, NULL );
+										
 CREATE TABLE IF NOT EXISTS airport (
 	airport_name NVARCHAR(20) NOT NULL,
 	ap_gateway INT NOT NULL,
@@ -213,9 +215,6 @@ INSERT INTO airport (airport_name, ap_gateway, ap_parking_area, ap_runway, ap_te
 ( 'Hualien Airport', 1, 1, 2, 1, 'Hualien', 'Taiwan', 'Hualien City' ),	
 ( 'Chumphon Airport', 2, 3, 1, 1, 'Chumphon', 'Thailand', 'Mueang Chumphon' );	
 
-
-
-
 CREATE TABLE IF NOT EXISTS legs (
     flight_num CHAR(6) NOT NULL,
     plane_size INT NOT NULL,
@@ -223,6 +222,7 @@ CREATE TABLE IF NOT EXISTS legs (
     seat_num CHAR(3) NOT NULL,
 	CONSTRAINT pk_legs PRIMARY KEY (flight_num)
 );
+
 TRUNCATE TABLE legs;
 INSERT INTO legs (flight_num, plane_size, plane_type, seat_num) VALUES
  ( 'AM0182', 78, 'Bombardier Dash 8 Q400', '40D' ),		
@@ -274,10 +274,7 @@ INSERT INTO legs (flight_num, plane_size, plane_type, seat_num) VALUES
  ( 'DF2891', 189, 'Boeing 737-800', '32C' ),		
  ( 'IR4090', 189, 'Boeing 737-800', '00B' ),		
  ( 'AZ7266', 189, 'Boeing 737-800', '20C' ),		
- ( 'EN2269', 180, 'Airbus A320', '01A' ),		
-
-
-
+ ( 'EN2269', 180, 'Airbus A320', '01A' );	
 
 CREATE TABLE IF NOT EXISTS ticket (
 	ticket_id CHAR(6) NOT NULL,
@@ -294,6 +291,7 @@ CREATE TABLE IF NOT EXISTS ticket (
 	CONSTRAINT fk_ticket_passport FOREIGN KEY (p_passport_id) REFERENCES passenger(p_passport_id),
 	CONSTRAINT fk_ticket_citizen FOREIGN KEY (cus_citizen_id) REFERENCES customer(cus_citizen_id)
 );
+
 TRUNCATE TABLE ticket;
 INSERT INTO ticket (ticket_id, seat_num, destination, travel_date, arrive_date, start_point, change_date, reserve_date, p_passport_id, cus_citizen_id) VALUES 
 ( 'HYAIGI', '11H', 'CNX', '2023-05-20 22:10:00', '2023-05-21 03:25:00', 'DMK', '2023-05-18 12:20:00', '2023-05-15 10:30:00', 'UM723096', '1102298671394' ),		
@@ -345,10 +343,7 @@ INSERT INTO ticket (ticket_id, seat_num, destination, travel_date, arrive_date, 
 ( 'NCPRVH', '32C', 'THS', '2023-05-20 22:10:46', '2023-05-21 01:55:46', 'DMK', NULL, '2023-05-11 16:50:00', 'WE176655', '1184078163731' ),		
 ( 'WNYSZB', '00B', 'DMK', '2023-05-20 22:10:47', '2023-05-21 03:10:47', 'CNX', NULL, '2023-05-18 12:25:00', 'GY522278', '1179894974098' ),		
 ( 'AQAUGB', '20C', 'KBV', '2023-05-20 22:10:48', '2023-05-21 07:40:48', 'DMK', NULL, '2023-05-05 09:30:00', 'MU534703', '1162499899066' ),		
-( 'EEZXNJ', '01A', 'UTH', '2023-05-20 22:10:49', '2023-05-21 06:10:49', 'DMK', '2023-05-19 18:45:00', '2023-05-15 06:40:00', 'JF808607', '1191160386967' ),									
-
-
-
+( 'EEZXNJ', '01A', 'UTH', '2023-05-20 22:10:49', '2023-05-21 06:10:49', 'DMK', '2023-05-19 18:45:00', '2023-05-15 06:40:00', 'JF808607', '1191160386967' );									
 
 CREATE TABLE IF NOT EXISTS contain (
     flight_num CHAR(6) NOT NULL,
@@ -411,9 +406,6 @@ INSERT INTO contain (flight_num, ticket_id, seat_num) VALUES
 ( 'AZ7266', 'AQAUGB', '20C' ),
 ( 'EN2269', 'EEZXNJ', '01A' );
 
-
-
-
 CREATE TABLE IF NOT EXISTS purchase (
 	addon_id CHAR(5) NOT NULL,
 	ticket_id CHAR(6) NOT NULL,
@@ -422,6 +414,7 @@ CREATE TABLE IF NOT EXISTS purchase (
 	CONSTRAINT fk_purchase_addon FOREIGN KEY (addon_id) REFERENCES add_on(addon_id),
 	CONSTRAINT fk_purchase_ticket FOREIGN KEY (ticket_id, seat_num) REFERENCES ticket(ticket_id, seat_num)
 );
+
 TRUNCATE TABLE purchase;
 INSERT INTO purchase (ticket_id, seat_num, addon_id) VALUES
   ( 'HYAIGI', '11H', 'NAO01' ),
@@ -473,7 +466,8 @@ INSERT INTO purchase (ticket_id, seat_num, addon_id) VALUES
   ( 'NCPRVH', '32C', NULL ),
   ( 'WNYSZB', '00B', 'NAO02' ),
   ( 'AQAUGB', '20C', NULL ),
-  ( 'EEZXNJ', '01A', 'NAO01' ),
+  ( 'EEZXNJ', '01A', 'NAO01' );
+  
 CREATE TABLE IF NOT EXISTS luggage (
 	luggage_id CHAR(8) NOT NULL,
 	l_pname NVARCHAR(20) NOT NULL,
@@ -483,6 +477,7 @@ CREATE TABLE IF NOT EXISTS luggage (
 	CONSTRAINT pk PRIMARY KEY (luggage_id),
 	CONSTRAINT fk_luggage FOREIGN KEY (p_passport_id) REFERENCES passenger(p_passport_id)
 );
+
 TRUNCATE TABLE luggage;
 INSERT INTO luggage (luggage_id, l_pname, l_weight, l_size, p_passport_id) VALUES
 ( 'ZD792387', 'Alice', 26.69, 'L', 'BA481920' ),
@@ -566,14 +561,14 @@ INSERT INTO luggage (luggage_id, l_pname, l_weight, l_size, p_passport_id) VALUE
 ( 'KJ602914', 'Jirawan', 28.48, 'XL', 'JN643754' ),
 ( 'RD362859', 'Phayung', 28.92, 'XL', 'CR407544' );
 
-
 CREATE TABLE IF NOT EXISTS color (
 	luggage_id CHAR(8) NOT NULL,
 	luggage_color NVARCHAR(20) NOT NULL,
 	CONSTRAINT pk_color PRIMARY KEY (luggage_id, luggage_color),
 	CONSTRAINT fk_color FOREIGN KEY (luggage_id) REFERENCES luggage(luggage_id)
 );
-RUNCATE TABLE color;
+
+TRUNCATE TABLE color;
 INSERT INTO color (luggage_id, luggage_color) VALUES
 ( 'ZD792387', 'Red' ),
 ( 'UK672870', 'Blue' ),
@@ -656,13 +651,13 @@ INSERT INTO color (luggage_id, luggage_color) VALUES
 ( 'KJ602914', 'Green' ),
 ( 'RD362859', 'Purple' );
 
-
 CREATE TABLE IF NOT EXISTS class (
 	flight_num CHAR(6) NOT NULL, 
 	legs_class NVARCHAR(20) NOT NULL,
 	CONSTRAINT pk_class PRIMARY KEY (flight_num, legs_class),
 	CONSTRAINT fk_class FOREIGN KEY (flight_num) REFERENCES legs(flight_num)
 );
+
 TRUNCATE TABLE class;
 INSERT INTO class (flight_num, legs_class) VALUES
 ( 'AM0182', 'Economic'),
@@ -714,7 +709,7 @@ INSERT INTO class (flight_num, legs_class) VALUES
 ( 'DF2891', 'Business'),
 ( 'IR4090', 'First Class'),
 ( 'AZ7266', 'Economic'),
-( 'EN2269', 'Business'),
+( 'EN2269', 'Business');
 
 CREATE TABLE IF NOT EXISTS boarding (
 	airport_name NVARCHAR(20) NOT NULL,
@@ -723,6 +718,7 @@ CREATE TABLE IF NOT EXISTS boarding (
 	CONSTRAINT fk_boarding_airport FOREIGN KEY (airport_name) REFERENCES airport(airport_name),
 	CONSTRAINT fk_boarding_flight FOREIGN KEY (flight_num) REFERENCES legs(flight_num)
 );
+
 TRUNCATE TABLE boarding;
 INSERT INTO class (airport_name, flight_num) VALUES
 ( 'Don Mueang International Airport', 'AM0182'),
@@ -783,6 +779,7 @@ CREATE TABLE IF NOT EXISTS landing (
 	CONSTRAINT fk_landing_airport FOREIGN KEY (airport_name) REFERENCES airport(airport_name),
 	CONSTRAINT fk_landing_flight FOREIGN KEY (flight_num) REFERENCES legs(flight_num)
 );
+
 TRUNCATE TABLE landing;
 INSERT INTO landing (airport_name, flight_num) VALUES
 ( 'Chiang Mai International Airport', 'AM0182'),
@@ -834,4 +831,4 @@ INSERT INTO landing (airport_name, flight_num) VALUES
 ( 'Thong Sala Pier', 'DF2891'),
 ( 'Don Mueang International Airport', 'IR4090'),
 ( 'Krabi International Airport', 'AZ7266'),
-( 'Udon Thani International Airport', 'EN2269'),
+( 'Udon Thani International Airport', 'EN2269');
